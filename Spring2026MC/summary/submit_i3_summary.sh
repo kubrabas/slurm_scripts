@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH --job-name=I3PhotonsSummarySpring2026MC
-#SBATCH --time=48:00:00
+#SBATCH --time=2:00:00
 #SBATCH --account=rpp-nahee
 #SBATCH --mem=96G
 #SBATCH --cpus-per-task=8
-#SBATCH --output=/home/kbas/scratch/Spring2026MC/Logs/SummaryI3_i3_%j.out
-#SBATCH --error=/home/kbas/scratch/Spring2026MC/Logs/SummaryI3_i3_%j.out
+#SBATCH --output=/home/kbas/scratch/Spring2026MC/Logs/SummaryI3_%j.out
+#SBATCH --error=/home/kbas/scratch/Spring2026MC/Logs/SummaryI3_%j.out
 
 set -euo pipefail
 
@@ -27,6 +27,7 @@ module load StdEnv/2020 gcc/11.3.0 apptainer scipy-stack/2023b
 CONTAINER="/cvmfs/software.pacific-neutrino.org/containers/itray_v1.17.1"
 PONE_OFFLINE="/cvmfs/software.pacific-neutrino.org/pone_offline/v1.2"
 PONESRCDIR="/project/6008051/pone_simulation/pone_offline"
+BASEDIR="/usr/local/icetray"
 
 PYTHON_SCRIPT="/project/def-nahee/kbas/Graphnet-Applications/DataPreperation/DatasetStatistics/prepare_summary_for_I3.py"
 
@@ -36,11 +37,14 @@ unset I3_BUILD || true
 apptainer exec \
   -B /localscratch/ \
   -B /cvmfs/software.pacific-neutrino.org/ \
-  -B /etc/OpenCL \
   "${CONTAINER}" \
   bash -lc " \
     set -euo pipefail; \
-    export PYTHONPATH='${PONE_OFFLINE}:\${PYTHONPATH:-}'; \
+    export PATH=${BASEDIR}/build/bin:\${PATH}; \
+    export LD_LIBRARY_PATH=${BASEDIR}/build/lib:\${LD_LIBRARY_PATH:-}; \
+    export PYTHONPATH=/usr/local/lib:${BASEDIR}/build/lib:${PONE_OFFLINE}:\${PYTHONPATH:-}; \
+    export I3_SRC=${BASEDIR}; \
+    export I3_BUILD=${BASEDIR}/build; \
     export PONESRCDIR='${PONESRCDIR}'; \
     export PYTHONUNBUFFERED=1; \
     python3 -u '${PYTHON_SCRIPT}' \
