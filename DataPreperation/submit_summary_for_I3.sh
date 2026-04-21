@@ -1,25 +1,16 @@
 #!/bin/bash
-#SBATCH --job-name=I3PhotonsSummarySpring2026MC
-#SBATCH --time=2:00:00
-#SBATCH --account=rpp-nahee
-#SBATCH --mem=96G
-#SBATCH --cpus-per-task=8
-#SBATCH --output=/home/kbas/scratch/Spring2026MC/Logs/SummaryI3_%j.out
-#SBATCH --error=/home/kbas/scratch/Spring2026MC/Logs/SummaryI3_%j.out
+#SBATCH --time=06:00:00
+#SBATCH --account=def-nahee
+#SBATCH --mem=64G
+#SBATCH --output=/dev/null
+#SBATCH --error=/dev/null
+
+# All parameters come from submit_summary_for_I3.py via --export:
+#   MC_NAME, PHOTON_KEY, OUT_CSV, OUT_TXT, WORKERS
 
 set -euo pipefail
 
-MC_NAME="SPRING2026MC"
-
-OUTDIR="/project/def-nahee/kbas/Graphnet-Applications/Metadata/DatasetStatistics/Spring2026MC"
-LOGDIR="/home/kbas/scratch/Spring2026MC/Logs"
-mkdir -p "${LOGDIR}"
-mkdir -p "${OUTDIR}"
-
 echo "--- HOST: JOB=${SLURM_JOB_ID:-} HOST=$(hostname)"
-echo "--- MC_NAME: ${MC_NAME}"
-echo "--- OUTDIR: ${OUTDIR}"
-echo "--- CPUS_PER_TASK: ${SLURM_CPUS_PER_TASK:-unset}"
 
 module --force purge
 module load StdEnv/2020 gcc/11.3.0 apptainer scipy-stack/2023b
@@ -28,11 +19,19 @@ CONTAINER="/cvmfs/software.pacific-neutrino.org/containers/itray_v1.17.1"
 PONE_OFFLINE="/cvmfs/software.pacific-neutrino.org/pone_offline/v1.2"
 PONESRCDIR="/project/6008051/pone_simulation/pone_offline"
 BASEDIR="/usr/local/icetray"
-
 PYTHON_SCRIPT="/project/def-nahee/kbas/Graphnet-Applications/DataPreperation/DatasetStatistics/prepare_summary_for_I3.py"
 
 unset I3_SHELL || true
 unset I3_BUILD || true
+
+echo "--- CONFIG: MC_NAME=${MC_NAME}"
+echo "--- CONFIG: PHOTON_KEY=${PHOTON_KEY}"
+echo "--- CONFIG: OUT_CSV=${OUT_CSV}"
+echo "--- CONFIG: OUT_TXT=${OUT_TXT}"
+echo "--- CONFIG: WORKERS=${WORKERS}"
+
+mkdir -p "$(dirname "${OUT_CSV}")"
+mkdir -p "$(dirname "${OUT_TXT}")"
 
 apptainer exec \
   -B /localscratch/ \
@@ -49,11 +48,12 @@ apptainer exec \
     export PYTHONUNBUFFERED=1; \
     python3 -u '${PYTHON_SCRIPT}' \
       --mc-name '${MC_NAME}' \
-      --workers '${SLURM_CPUS_PER_TASK:-1}' \
-      --out-csv '${OUTDIR}/i3summary.csv' \
-      --out-txt '${OUTDIR}/i3summary.txt' \
+      --photon-key '${PHOTON_KEY}' \
+      --out-csv '${OUT_CSV}' \
+      --out-txt '${OUT_TXT}' \
+      --workers '${WORKERS}' \
   "
 
 rc=$?
-echo "--- Job finished (rc=${rc})"
+echo "--- DEBUG (HOST): Job finished (rc=${rc})"
 exit $rc
