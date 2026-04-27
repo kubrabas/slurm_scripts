@@ -1,0 +1,35 @@
+INFO:    Using cached SIF image
+WARNING: While bind mounting '/project:/project': destination is already in the mount point list
+=== Python ===
+Python: 3.11.14 | packaged by conda-forge | (main, Oct 22 2025, 22:46:25) [GCC 14.3.0]
+
+=== PyTorch ===
+torch: 2.6.0+cu126
+CUDA available: True
+CUDA version: 12.6
+GPU: NVIDIA H100 80GB HBM3 MIG 1g.10gb
+GPU tensor test: tensor([1.], device='cuda:0')
+
+=== PyTorch Lightning ===
+pytorch_lightning: 2.6.0
+
+=== GraphNeT ===
+graphnet: 1.8.0+2.g141503f.dirty
+torchdiffeq not found - no support for continuous flows. Install *torchdiffeq* if support is desired!
+Meander not installed... contours can not be calculated.
+Healpy not installed... spherical contours can not be calculated.
+package *astropy* not found -> if you want to use plotting functionality for adaptive grids, install *astropy*!
+package *mhealpy* not found -> if you want to use plotting functionality for adaptive grids, install *mhealpy*!
+Cannot use healpy functionality. Install healpy, if you need to do entropy scanning!
+[1;34mgraphnet[0m [MainProcess] [33mWARNING [0m 2026-04-27 03:08:06 - <module> - `graphnet.models.graphs` will be depricated soon. All functionality has been moved to `graphnet.models.data_representation`.[0m
+graphnet imports: OK
+
+=== Utils (examples/08_pone) ===
+[1;34mgraphnet[0m [MainProcess] [33mWARNING [0m 2026-04-27 03:08:06 - <module> - `icecube` not available. Some functionality may be missing.[0m
+[1;34mgraphnet[0m [MainProcess] [33mWARNING [0m 2026-04-27 03:08:07 - <module> - `km3net` not available. Some functionality may be missing.[0m
+utils imports: OK
+
+=== Other ===
+yaml: OK
+
+=== ALL CHECKS PASSED ===
