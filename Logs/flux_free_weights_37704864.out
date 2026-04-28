@@ -1,0 +1,97 @@
+--- START: Tue Apr 28 09:10:56 PDT 2026
+--- HOST: JOB=37704864 HOST=fb21808
+--- CONFIG: MC_NAME=SPRING2026MC
+--- Unit conversions assumed ---
+  InjectionRadius:  m  → cm  (× 100) applied at weight calculation
+  CylinderRadius:   m  → cm  (× 100) applied at weight calculation
+  CylinderHeight:   m  → cm  (× 100) applied at weight calculation
+  sigma_tot:        m² → cm² (× 1e4)  applied at weight calculation
+  sigma_diff:       m² → cm² (× 1e4)  applied at weight calculation
+  TotalColumnDepth: g/cm² (no conversion)
+  TotalEnergy:      GeV   (no conversion)
+  ImpactParameter:  cm    (no conversion)
+
+Loading cross section splines...
+Cross section splines loaded:
+  CC: sigma_tot ✓  sigma_diff ✓
+  NC: sigma_tot ✓  sigma_diff ✓
+
+--- N_gen per flavor ---
+  Muon: 88 files × 200 = 17600 events
+  Electron: 21 files × 200 = 4200 events
+  Tau: 28 files × 200 = 5600 events
+  NC: 46 files × 200 = 9200 events
+
+--- Extracting events ---
+Muon: processing 88 files...
+Muon: 7444 events extracted
+Electron: processing 21 files...
+Electron: 4192 events extracted
+Tau: processing 28 files...
+Tau: 5581 events extracted
+NC: processing 46 files...
+NC: 9074 events extracted
+
+--- Sanity check: generation parameters ---
+  Muon: all generation parameters are constant ✓
+  Electron: all generation parameters are constant ✓
+  Tau: all generation parameters are constant ✓
+  NC: all generation parameters are constant ✓
+
+--- Per-flavor generation constants ---
+
+  Muon (ranged):
+    EnergyMin       = 100.0 GeV
+    EnergyMax       = 1000000.0 GeV
+    PowerlawIndex   = 1.5
+    Energy integral = 1.980000e-01 GeV^(1-gamma)
+    ZenithMin/Max   = 0.0000 / 3.1416 rad
+    AzimuthMin/Max  = 0.0000 / 6.2832 rad
+    Solid angle     = 1.256637e+01 sr
+    N_gen           = 17600
+    InjectionRadius = 1000.0 m = 100000.0 cm
+    A_gen           = pi × r² = 3.141593e+10 cm²
+
+  Electron (volume):
+    EnergyMin       = 100.0 GeV
+    EnergyMax       = 1000000.0 GeV
+    PowerlawIndex   = 1.5
+    Energy integral = 1.980000e-01 GeV^(1-gamma)
+    ZenithMin/Max   = 0.0000 / 3.1416 rad
+    AzimuthMin/Max  = 0.0000 / 6.2832 rad
+    Solid angle     = 1.256637e+01 sr
+    N_gen           = 4200
+    CylinderRadius  = 900.0 m = 90000.0 cm
+    CylinderHeight  = 1100.0 m = 110000.0 cm
+    V_gen           = pi × r² × h = 2.799159e+15 cm³
+
+  Tau (volume):
+    EnergyMin       = 100.0 GeV
+    EnergyMax       = 1000000.0 GeV
+    PowerlawIndex   = 1.5
+    Energy integral = 1.980000e-01 GeV^(1-gamma)
+    ZenithMin/Max   = 0.0000 / 3.1416 rad
+    AzimuthMin/Max  = 0.0000 / 6.2832 rad
+    Solid angle     = 1.256637e+01 sr
+    N_gen           = 5600
+    CylinderRadius  = 900.0 m = 90000.0 cm
+    CylinderHeight  = 1100.0 m = 110000.0 cm
+    V_gen           = pi × r² × h = 2.799159e+15 cm³
+
+  NC (volume):
+    EnergyMin       = 100.0 GeV
+    EnergyMax       = 1000000.0 GeV
+    PowerlawIndex   = 1.5
+    Energy integral = 1.980000e-01 GeV^(1-gamma)
+    ZenithMin/Max   = 0.0000 / 3.1416 rad
+    AzimuthMin/Max  = 0.0000 / 6.2832 rad
+    Solid angle     = 1.256637e+01 sr
+    N_gen           = 9200
+    CylinderRadius  = 900.0 m = 90000.0 cm
+    CylinderHeight  = 1100.0 m = 110000.0 cm
+    V_gen           = pi × r² × h = 2.799159e+15 cm³
+
+Saved to: /project/def-nahee/kbas/Graphnet-Applications/Metadata/EventWeights/Spring2026MC/flux_free_weight_metadata.csv
+Total shape: (26291, 28)
+--- END: Tue Apr 28 09:42:28 PDT 2026
+--- DEBUG: Job finished (rc=0)
