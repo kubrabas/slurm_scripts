@@ -20,7 +20,7 @@ module --force purge
 module load StdEnv/2020 gcc/11.3.0 apptainer scipy-stack/2023b
 
 CONTAINER="/cvmfs/software.pacific-neutrino.org/containers/itray_v1.17.1"
-PONE_OFFLINE="/cvmfs/software.pacific-neutrino.org/pone_offline/v1.2"
+PONE_OFFLINE="/cvmfs/software.pacific-neutrino.org/pone_offline/v2.0"
 PONESRCDIR="/project/6008051/pone_simulation/pone_offline"
 BASEDIR="/usr/local/icetray"
 PYTHON_SCRIPT="/project/def-nahee/kbas/Graphnet-Applications/DataPreperation/Skim/trim_I3.py"
