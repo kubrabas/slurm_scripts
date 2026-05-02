@@ -1,13 +1,13 @@
 #!/bin/bash
-#SBATCH --time=03:00:00
+#SBATCH --time=02:00:00
 #SBATCH --account=def-nahee
-#SBATCH --mem=64G
+#SBATCH --mem=32G
 #SBATCH --cpus-per-task=1
 #SBATCH --output=/dev/null
 #SBATCH --error=/dev/null
 
-# All parameters come from submit_pmt_response.py via --export:
-#   FLAVOR, GEOMETRY, MC, INDIR, PATTERN, GCD, OUTDIR, LOGDIR
+# All parameters come from submit_LIW.py via --export:
+#   MC, FLAVOR, LIC_DIR, PHOTON_DIR, PHOTON_PATTERN, OUTDIR, LOGDIR
 
 set -euo pipefail
 
@@ -23,48 +23,40 @@ CONTAINER="/cvmfs/software.pacific-neutrino.org/containers/itray_v1.17.1"
 PONE_OFFLINE="/cvmfs/software.pacific-neutrino.org/pone_offline/v2.0"
 PONESRCDIR="/project/6008051/pone_simulation/pone_offline"
 BASEDIR="/usr/local/icetray"
-PMT_BASE="/project/def-nahee/kbas/Graphnet-Applications/DataPreperation/PmtResponse"
-if [[ "${WITH_FIRST_3_LAYERS:-0}" == "1" ]]; then
-    PYTHON_SCRIPT="${PMT_BASE}/apply_pmt_response_with_first_3_layers.py"
-else
-    PYTHON_SCRIPT="${PMT_BASE}/apply_pmt_response_without_first_3_layers.py"
-fi
+PYTHON_SCRIPT="/project/def-nahee/kbas/Graphnet-Applications/DataPreperation/EventWeights/LIW/calculate_LIW.py"
 
 unset I3_SHELL || true
 unset I3_BUILD || true
 
 echo "--- CONFIG: MC=${MC}"
 echo "--- CONFIG: FLAVOR=${FLAVOR}"
-echo "--- CONFIG: GEOMETRY=${GEOMETRY}"
-echo "--- CONFIG: INDIR=${INDIR}"
-echo "--- CONFIG: PATTERN=${PATTERN}"
-echo "--- CONFIG: GCD=${GCD}"
+echo "--- CONFIG: LIC_DIR=${LIC_DIR}"
+echo "--- CONFIG: PHOTON_DIR=${PHOTON_DIR}"
+echo "--- CONFIG: PHOTON_PATTERN=${PHOTON_PATTERN}"
 echo "--- CONFIG: OUTDIR=${OUTDIR}"
 echo "--- CONFIG: LOGDIR=${LOGDIR}"
-echo "--- CONFIG: PYTHON_SCRIPT=${PYTHON_SCRIPT}"
 
 apptainer exec \
   -B /localscratch/ \
   -B /cvmfs/software.pacific-neutrino.org/ \
   "${CONTAINER}" \
-  bash -c " \
+  bash -lc " \
     set -euo pipefail; \
     export PATH=${BASEDIR}/build/bin:\${PATH}; \
-    export LD_LIBRARY_PATH=${BASEDIR}/build/lib:\${LD_LIBRARY_PATH:-}; \
-    export PYTHONPATH=/usr/local/lib:${BASEDIR}/build/lib:${PONE_OFFLINE}:\${PYTHONPATH:-}; \
+    export LD_LIBRARY_PATH=/usr/local/LeptonWeighter/lib:/usr/local/lib:${BASEDIR}/build/lib:\${LD_LIBRARY_PATH:-}; \
+    export PYTHONPATH=/usr/local/LeptonWeighter/lib:/usr/local/lib:${BASEDIR}/build/lib:${PONE_OFFLINE}:\${PYTHONPATH:-}; \
     export I3_SRC=${BASEDIR}; \
     export I3_BUILD=${BASEDIR}/build; \
     export PONESRCDIR='${PONESRCDIR}'; \
     export PYTHONUNBUFFERED=1; \
     python3 -u '${PYTHON_SCRIPT}' \
-      --flavor '${FLAVOR}' \
-      --geometry '${GEOMETRY}' \
       --mc '${MC}' \
-      --indir '${INDIR}' \
-      --pattern '${PATTERN}' \
+      --flavor '${FLAVOR}' \
+      --lic-dir '${LIC_DIR}' \
+      --photon-dir '${PHOTON_DIR}' \
+      --photon-pattern '${PHOTON_PATTERN}' \
       --outdir '${OUTDIR}' \
       --logdir '${LOGDIR}' \
-      --gcd '${GCD}' \
   "
 
 rc=$?
