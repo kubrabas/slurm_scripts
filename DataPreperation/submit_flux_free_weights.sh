@@ -17,7 +17,7 @@ echo "--- CONFIG: MC_NAME=${MC_NAME}"
 module --force purge
 module load StdEnv/2020 gcc/11.3.0 apptainer scipy-stack/2023b
 
-CONTAINER="/cvmfs/software.pacific-neutrino.org/containers/itray_v1.15.3"
+CONTAINER="/cvmfs/software.pacific-neutrino.org/containers/itray_v1.17.1"
 BASEDIR="/usr/local/icetray"
 PYTHON_SCRIPT="/project/def-nahee/kbas/Graphnet-Applications/DataPreperation/EventWeights/calculate_flux_free_weights.py"
 
