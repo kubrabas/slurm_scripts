@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --time=00:05:00
 #SBATCH --account=def-nahee
-#SBATCH --mem16G
+#SBATCH --mem=16G
 #SBATCH --cpus-per-task=1
 #SBATCH --output=/dev/null
 #SBATCH --error=/dev/null
