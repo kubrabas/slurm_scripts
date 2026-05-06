@@ -1,20 +1,20 @@
 #!/bin/bash
-#SBATCH --time=00:30:00
+#SBATCH --time=02:00:00
 #SBATCH --account=def-nahee
-#SBATCH --mem=16G
-#SBATCH --cpus-per-task=2
-#SBATCH --output=/dev/null
-#SBATCH --error=/dev/null
+#SBATCH --mem=64G
+#SBATCH --cpus-per-task=16
+#SBATCH --output=/home/kbas/scratch/slurm_parquet_%j.out
+#SBATCH --error=/home/kbas/scratch/slurm_parquet_%j.out
 
 # All parameters come from submit_parquet.py via --export:
-#   MC, FLAVOR, GEOMETRY, INDIR, GCD, OUTDIR, LOGDIR
+#   MC, FLAVOR, GEOMETRY, INDIR, GCD, OUTDIR, LOGDIR, PULSEMAP, NWORKERS
 
 set -euo pipefail
 
 mkdir -p "${LOGDIR}"
 mkdir -p "${OUTDIR}"
 
-echo "--- HOST: ARRAY_JOB_ID=${SLURM_ARRAY_JOB_ID:-} TASK=${SLURM_ARRAY_TASK_ID:-} JOB=${SLURM_JOB_ID:-} HOST=$(hostname)"
+echo "--- HOST: JOB=${SLURM_JOB_ID:-} HOST=$(hostname) NWORKERS=${NWORKERS:-?}"
 
 module --force purge
 module load StdEnv/2020 gcc/11.3.0 apptainer scipy-stack/2023b
@@ -34,6 +34,7 @@ echo "--- CONFIG: INDIR=${INDIR}"
 echo "--- CONFIG: GCD=${GCD}"
 echo "--- CONFIG: OUTDIR=${OUTDIR}"
 echo "--- CONFIG: LOGDIR=${LOGDIR}"
+echo "--- CONFIG: NWORKERS=${NWORKERS}"
 
 apptainer exec \
   -B /localscratch/ \
@@ -58,6 +59,7 @@ apptainer exec \
       --outdir '${OUTDIR}' \
       --logdir '${LOGDIR}' \
       --pulsemap '${PULSEMAP}' \
+      --nworkers '${NWORKERS}' \
   "
 
 rc=$?

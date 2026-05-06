@@ -1,20 +1,20 @@
 #!/bin/bash
-#SBATCH --time=03:00:00
+#SBATCH --time=06:00:00
 #SBATCH --account=def-nahee
 #SBATCH --mem=64G
-#SBATCH --cpus-per-task=1
+#SBATCH --cpus-per-task=16
 #SBATCH --output=/dev/null
 #SBATCH --error=/dev/null
 
 # All parameters come from submit_pmt_response.py via --export:
-#   FLAVOR, GEOMETRY, MC, INDIR, PATTERN, GCD, OUTDIR, LOGDIR
+#   FLAVOR, GEOMETRY, MC, INDIR, PATTERN, GCD, OUTDIR, LOGDIR, WITH_FIRST_3_LAYERS, NWORKERS
 
 set -euo pipefail
 
 mkdir -p "${LOGDIR}"
 mkdir -p "${OUTDIR}"
 
-echo "--- HOST: ARRAY_JOB_ID=${SLURM_ARRAY_JOB_ID:-} TASK=${SLURM_ARRAY_TASK_ID:-} JOB=${SLURM_JOB_ID:-} HOST=$(hostname)"
+echo "--- HOST: JOB=${SLURM_JOB_ID:-} HOST=$(hostname) NWORKERS=${NWORKERS:-}"
 
 module --force purge
 module load StdEnv/2020 gcc/11.3.0 apptainer scipy-stack/2023b
@@ -65,6 +65,7 @@ apptainer exec \
       --outdir '${OUTDIR}' \
       --logdir '${LOGDIR}' \
       --gcd '${GCD}' \
+      --nworkers '${NWORKERS}' \
   "
 
 rc=$?
