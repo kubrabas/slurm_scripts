@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --time=02:00:00
+#SBATCH --time=12:00:00
 #SBATCH --account=def-nahee
 #SBATCH --mem=64G
 #SBATCH --cpus-per-task=16
@@ -39,7 +39,6 @@ echo "--- CONFIG: NWORKERS=${NWORKERS}"
 apptainer exec \
   -B /localscratch/ \
   -B /cvmfs/software.pacific-neutrino.org/ \
-  -B /project \
   -B /home/kbas/scratch \
   "${CONTAINER}" \
   bash -lc " \
