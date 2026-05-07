@@ -1,20 +1,20 @@
 #!/bin/bash
-#SBATCH --time=00:05:00
+#SBATCH --time=02:00:00
 #SBATCH --account=def-nahee
-#SBATCH --mem=16G
-#SBATCH --cpus-per-task=1
+#SBATCH --mem=32G
+#SBATCH --cpus-per-task=16
 #SBATCH --output=/dev/null
 #SBATCH --error=/dev/null
 
 # All parameters come from submit_LIW.py via --export:
-#   MC, FLAVOR, LIC_DIR, PHOTON_DIR, PHOTON_PATTERN, OUTDIR, LOGDIR
+#   MC, FLAVOR, LIC_DIR, PHOTON_DIR, PHOTON_PATTERN, OUTDIR, LOGDIR, WORKERS
 
 set -euo pipefail
 
 mkdir -p "${LOGDIR}"
 mkdir -p "${OUTDIR}"
 
-echo "--- HOST: ARRAY_JOB_ID=${SLURM_ARRAY_JOB_ID:-} TASK=${SLURM_ARRAY_TASK_ID:-} JOB=${SLURM_JOB_ID:-} HOST=$(hostname)"
+echo "--- HOST: JOB=${SLURM_JOB_ID:-} HOST=$(hostname)"
 
 module --force purge
 module load StdEnv/2020 gcc/11.3.0 apptainer scipy-stack/2023b
@@ -35,6 +35,7 @@ echo "--- CONFIG: PHOTON_DIR=${PHOTON_DIR}"
 echo "--- CONFIG: PHOTON_PATTERN=${PHOTON_PATTERN}"
 echo "--- CONFIG: OUTDIR=${OUTDIR}"
 echo "--- CONFIG: LOGDIR=${LOGDIR}"
+echo "--- CONFIG: WORKERS=${WORKERS:-16}"
 
 apptainer exec \
   -B /localscratch/ \
@@ -57,6 +58,7 @@ apptainer exec \
       --photon-pattern '${PHOTON_PATTERN}' \
       --outdir '${OUTDIR}' \
       --logdir '${LOGDIR}' \
+      --workers '${WORKERS:-16}' \
   "
 
 rc=$?
