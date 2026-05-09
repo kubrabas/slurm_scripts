@@ -3,8 +3,8 @@
 #SBATCH --account=def-nahee
 #SBATCH --mem=32G
 #SBATCH --cpus-per-task=4
-#SBATCH --output=/home/kbas/scratch/slurm_parquet_merge_%j.out
-#SBATCH --error=/home/kbas/scratch/slurm_parquet_merge_%j.out
+#SBATCH --output=/dev/null
+#SBATCH --error=/dev/null
 
 # Runs automatically after the Parquet conversion job finishes (any outcome).
 # Parameters come from submit_parquet.py via --export:
