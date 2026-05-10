@@ -1,8 +1,8 @@
 #!/bin/bash
-#SBATCH --time=06:00:00
+#SBATCH --time=24:00:00
 #SBATCH --account=def-nahee
-#SBATCH --mem=64G
-#SBATCH --cpus-per-task=16
+#SBATCH --mem=128G
+#SBATCH --cpus-per-task=8
 #SBATCH --output=/dev/null
 #SBATCH --error=/dev/null
 
