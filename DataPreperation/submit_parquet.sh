@@ -3,8 +3,8 @@
 #SBATCH --account=def-nahee
 #SBATCH --mem=64G
 #SBATCH --cpus-per-task=16
-#SBATCH --output=/home/kbas/scratch/slurm_parquet_%j.out
-#SBATCH --error=/home/kbas/scratch/slurm_parquet_%j.out
+#SBATCH --output=/dev/null
+#SBATCH --error=/dev/null
 
 # All parameters come from submit_parquet.py via --export:
 #   MC, FLAVOR, GEOMETRY, INDIR, GCD, OUTDIR, LOGDIR, PULSEMAP, NWORKERS

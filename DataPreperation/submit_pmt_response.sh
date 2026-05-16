@@ -2,7 +2,7 @@
 #SBATCH --time=24:00:00
 #SBATCH --account=def-nahee
 #SBATCH --mem=128G
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=12
 #SBATCH --output=/dev/null
 #SBATCH --error=/dev/null
 
