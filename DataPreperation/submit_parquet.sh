@@ -7,7 +7,7 @@
 #SBATCH --error=/dev/null
 
 # All parameters come from submit_parquet.py via --export:
-#   MC, FLAVOR, GEOMETRY, INDIR, GCD, OUTDIR, LOGDIR, PULSEMAP, NWORKERS
+#   MC, FLAVOR, GEOMETRY, INDIR, GCD, OUTDIR, LOGDIR, PULSEMAP, NWORKERS, optional MAX_ENERGY
 
 set -euo pipefail
 
@@ -35,6 +35,11 @@ echo "--- CONFIG: GCD=${GCD}"
 echo "--- CONFIG: OUTDIR=${OUTDIR}"
 echo "--- CONFIG: LOGDIR=${LOGDIR}"
 echo "--- CONFIG: NWORKERS=${NWORKERS}"
+echo "--- CONFIG: MAX_ENERGY=${MAX_ENERGY:-none}"
+MAX_ENERGY_ARG=""
+if [[ -n "${MAX_ENERGY:-}" ]]; then
+  MAX_ENERGY_ARG="--max-energy ${MAX_ENERGY}"
+fi
 
 apptainer exec \
   -B /localscratch/ \
@@ -59,6 +64,7 @@ apptainer exec \
       --logdir '${LOGDIR}' \
       --pulsemap '${PULSEMAP}' \
       --nworkers '${NWORKERS}' \
+      ${MAX_ENERGY_ARG} \
   "
 
 rc=$?

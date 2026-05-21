@@ -8,7 +8,7 @@
 
 # Runs automatically after the Parquet conversion job finishes (any outcome).
 # Parameters come from submit_parquet.py via --export:
-#   MC, FLAVOR, GEOMETRY, OUTDIR, LOGDIR
+#   MC, FLAVOR, GEOMETRY, OUTDIR, LOGDIR, optional METADATA_SUFFIX
 
 set -euo pipefail
 
@@ -23,6 +23,11 @@ echo "--- HOST: JOB=${SLURM_JOB_ID:-} HOST=$(hostname)"
 echo "--- CONFIG: MC=${MC}  FLAVOR=${FLAVOR}  GEOMETRY=${GEOMETRY}"
 echo "--- CONFIG: OUTDIR=${OUTDIR}"
 echo "--- CONFIG: LOGDIR=${LOGDIR}"
+echo "--- CONFIG: METADATA_SUFFIX=${METADATA_SUFFIX:-none}"
+METADATA_SUFFIX_ARG=""
+if [[ -n "${METADATA_SUFFIX:-}" ]]; then
+  METADATA_SUFFIX_ARG="--metadata-suffix ${METADATA_SUFFIX}"
+fi
 
 module --force purge
 module load StdEnv/2020 gcc/11.3.0 apptainer scipy-stack/2023b
@@ -30,7 +35,7 @@ module load StdEnv/2020 gcc/11.3.0 apptainer scipy-stack/2023b
 unset I3_SHELL || true
 unset I3_BUILD || true
 
-apptainer exec   -B /localscratch/   -B /cvmfs/software.pacific-neutrino.org/   -B /home/kbas/scratch   "${CONTAINER}"   bash -lc "     set -euo pipefail;     export PATH=${BASEDIR}/build/bin:\${PATH};     export LD_LIBRARY_PATH=${BASEDIR}/build/lib:\${LD_LIBRARY_PATH:-};     export PYTHONPATH=${GRAPHNET_SRC}:/usr/local/lib:${BASEDIR}/build/lib:\${PYTHONPATH:-};     export I3_SRC=${BASEDIR};     export I3_BUILD=${BASEDIR}/build;     export PYTHONUNBUFFERED=1;     python3 -u '${MERGE_SCRIPT}'       --mc '${MC}'       --flavor '${FLAVOR}'       --geometry '${GEOMETRY}'       --outdir '${OUTDIR}'       --logdir '${LOGDIR}'       --num-workers 4   "
+apptainer exec   -B /localscratch/   -B /cvmfs/software.pacific-neutrino.org/   -B /home/kbas/scratch   "${CONTAINER}"   bash -lc "     set -euo pipefail;     export PATH=${BASEDIR}/build/bin:\${PATH};     export LD_LIBRARY_PATH=${BASEDIR}/build/lib:\${LD_LIBRARY_PATH:-};     export PYTHONPATH=${GRAPHNET_SRC}:/usr/local/lib:${BASEDIR}/build/lib:\${PYTHONPATH:-};     export I3_SRC=${BASEDIR};     export I3_BUILD=${BASEDIR}/build;     export PYTHONUNBUFFERED=1;     python3 -u '${MERGE_SCRIPT}'       --mc '${MC}'       --flavor '${FLAVOR}'       --geometry '${GEOMETRY}'       --outdir '${OUTDIR}'       --logdir '${LOGDIR}'       --num-workers 4       ${METADATA_SUFFIX_ARG}   "
 
 rc=$?
 echo "--- merge finished (rc=${rc})"
